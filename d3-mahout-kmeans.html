@@ -38,8 +38,8 @@
 				return _.reduce(str.split('\n'), function(table,row){
 					if(!table) return;
 					table.push(
-			    		_.map(row.split(delimiter), function(d){ return d.trim() } )
-			    	);
+						_.map(row.split(delimiter), function(d){ return d.trim() } )
+					);
 					return table;
 				}, []);
 			}
@@ -99,29 +99,29 @@
 				//各要素描画
 				var pointDots = graph.selectAll('points').data(points);
 				pointDots.enter().append('circle')
-		    		.attr('r', 3)
-		    		.attr('cx',function(d){ return xScale(d[0]); })
-		    		.attr('cy',function(d){ return yScale(d[1]); });
+					.attr('r', 3)
+					.attr('cx',function(d){ return xScale(d[0]); })
+					.attr('cy',function(d){ return yScale(d[1]); });
 
 
 		 		//重心点描画
-		    	var meanDots = graph.selectAll('means').data(means);
+				var meanDots = graph.selectAll('means').data(means);
 				meanDots.enter().append('circle')
-		    		.attr('r', 5)
-		    		.attr('stroke', function(d, i) { return color(i); })
-		    		.attr('stroke-width', 3)
-		    		.attr('fill', function(d, i) { return color(i); })
-		    		.attr('cx',function(d){ return xScale(d[0]); })
-		    		.attr('cy',function(d){ return yScale(d[1]); });
+					.attr('r', 5)
+					.attr('stroke', function(d, i) { return color(i); })
+					.attr('stroke-width', 3)
+					.attr('fill', function(d, i) { return color(i); })
+					.attr('cx',function(d){ return xScale(d[0]); })
+					.attr('cy',function(d){ return yScale(d[1]); });
 
 		 		//線描画
 				var clusterLines = graph.selectAll('lines').data(clusters);
 				clusterLines.enter().append('line')
-		    		.attr('x1',function(d, i){ return xScale(points[i][0]); })
-		    		.attr('y1',function(d, i){ return yScale(points[i][1]); })
-		    		.attr('x2',function(d, i){ return xScale(means[d][0]); })
-		    		.attr('y2',function(d, i){ return yScale(means[d][1]); })
-		    		.attr('stroke', function(d) { return color(d); });
+					.attr('x1',function(d, i){ return xScale(points[i][0]); })
+					.attr('y1',function(d, i){ return yScale(points[i][1]); })
+					.attr('x2',function(d, i){ return xScale(means[d][0]); })
+					.attr('y2',function(d, i){ return yScale(means[d][1]); })
+					.attr('stroke', function(d) { return color(d); });
 			}
 
 			//描画実行
