@@ -1,132 +1,131 @@
 <html lang="ja">
-	<head>
-	  <meta charset="utf-8">
-	</head>
-	<body>
-		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<script src="http://underscorejs.org/underscore-min.js"></script>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
 
-		<div id="draw"></div>
+    <div id="draw"></div>
 
-		<script>
+    <script>
 
-			//Mahoutの出力結果。本来はファイル読み込みとかすべき。
-			var mahoutKmeansOutput = 
+      //Mahoutの出力結果。本来はファイル読み込みとかすべき。
+      var mahoutKmeansOutput = 
 "90,_0_184.0_1_58.0_,_0_56.0_1_71.0_,_0_96.0_1_94.0_,_0_81.0_1_90.0_,_0_48.0_1_95.0_,_0_78.0_1_88.0_,_0_80.0_1_65.0_,_0_76.0_1_83.0_,_0_80.0_1_75.0_,_0_86.0_1_89.0_,_0_73.0_1_82.0_,_0_45.0_1_100.0_,_0_75.0_1_94.0_,_0_61.0_1_74.0_,_0_75.0_1_64.0_,_0_73.0_1_82.0_,_0_88.0_1_95.0_,_0_62.0_1_75.0_,_0_67.0_1_87.0_,_0_59.0_1_95.0_,_0_55.0_1_68.0_,_0_56.0_1_92.0_,_0_79.0_1_83.0_\n"+
 "93,_0_21.0_1_15.0_,_0_62.0_1_7.0_,_0_21.0_1_15.0_,_0_62.0_1_7.0_,_0_18.0_1_7.0_,_0_5.0_1_16.0_,_0_51.0_1_8.0_,_0_42.0_1_34.0_,_0_45.0_1_8.0_,_0_31.0_1_38.0_,_0_74.0_1_12.0_,_0_13.0_1_4.0_,_0_33.0_1_7.0_,_0_35.0_1_4.0_,_0_3.0_1_6.0_,_0_11.0_1_14.0_,_0_28.0_1_5.0_,_0_19.0_1_8.0_,_0_39.0_1_28.0_,_0_67.0_1_13.0_,_0_20.0_1_29.0_,_0_39.0_1_2.0_,_0_54.0_1_31.0_,_0_64.0_1_11.0_\n"+
 "94,_0_4.0_1_58.0_,_0_28.0_1_56.0_,_0_6.0_1_73.0_,_0_28.0_1_56.0_,_0_6.0_1_73.0_,_0_35.0_1_74.0_,_0_36.0_1_94.0_,_0_19.0_1_51.0_,_0_13.0_1_64.0_,_0_22.0_1_49.0_,_0_25.0_1_93.0_,_0_24.0_1_70.0_,_0_15.0_1_90.0_,_0_15.0_1_88.0_,_0_33.0_1_93.0_,_0_12.0_1_95.0_,_0_11.0_1_84.0_,_0_23.0_1_74.0_,_0_22.0_1_96.0_,_0_3.0_1_40.0_,_0_4.0_1_98.0_,_0_19.0_1_84.0_,_0_39.0_1_96.0_,_0_12.0_1_86.0_,_0_3.0_1_35.0_,_0_7.0_1_65.0_,_0_12.0_1_94.0_,_0_19.0_1_81.0_,_0_9.0_1_59.0_\n"+
 "96,_0_89.0_1_58.0_,_0_46.0_1_46.0_,_0_76.0_1_39.0_,_0_69.0_1_61.0_,_0_63.0_1_36.0_,_0_84.0_1_62.0_,_0_71.0_1_53.0_,_0_95.0_1_25.0_,_0_88.0_1_16.0_,_0_64.0_1_54.0_,_0_86.0_1_9.0_,_0_87.0_1_10.0_,_0_85.0_1_51.0_,_0_51.0_1_52.0_,_0_85.0_1_13.0_,_0_97.0_1_1.0_,_0_50.0_1_48.0_,_0_79.0_1_59.0_,_0_98.0_1_11.0_,_0_89.0_1_10.0_,_0_68.0_1_55.0_,_0_88.0_1_25.0_,_0_72.0_1_44.0_,_0_66.0_1_23.0_"
 ;
-			//各要素の座標
-			var points = [];
-			//各クラスタの重心座標。動的に読み込むべき。
-			var means = [[76.609, 82.304],[45.567, 13.167],[17.379, 74.793],[72.611, 44.500]];
-			//各要素が属するクラスタ
-			var clusters = [];
-			//X軸最大値
-			var maxX = 0;
-			//Y軸最大値
-			var maxY = 0;
-			//描画領域幅
-			var w = 700;
-			//描画領域高さ
-			var h = 700;
+      //各要素の座標
+      var points = [];
+      //各クラスタの重心座標。動的に読み込むべき。
+      var means = [[76.609, 82.304],[45.567, 13.167],[17.379, 74.793],[72.611, 44.500]];
+      //各要素が属するクラスタ
+      var clusters = [];
+      //X軸最大値
+      var maxX = 0;
+      //Y軸最大値
+      var maxY = 0;
+      //描画領域幅
+      var w = 700;
+      //描画領域高さ
+      var h = 700;
 
-			//CSV文字列を配列へ変換
-			function _parseCSV(str, delimiter){
-				if(!delimiter) delimiter = ",";
-				return _.reduce(str.split('\n'), function(table,row){
-					if(!table) return;
-					table.push(
-						_.map(row.split(delimiter), function(d){ return d.trim() } )
-					);
-					return table;
-				}, []);
-			}
+      //CSV文字列を配列へ変換
+      function _parseCSV(str, delimiter){
+        if(!delimiter) delimiter = ",";
+        return _.reduce(str.split('\n'), function(table,row){
+          if(!table) return;
+          table.push(
+            _.map(row.split(delimiter), function(d){ return d.trim() } )
+          );
+          return table;
+        }, []);
+      }
 
-			function parseMahoutCSV(mahoutKmeansOutput){
-				//配列へ変換
-				var dataArray = _parseCSV(mahoutKmeansOutput);
-				var maxValue = 0;
+      function parseMahoutCSV(mahoutKmeansOutput){
+        //配列へ変換
+        var dataArray = _parseCSV(mahoutKmeansOutput);
+        var maxValue = 0;
 
-				//行分ループ
-				for (var i=0; i < dataArray.length; i++){
-					console.log(dataArray[i]);
-					//列分ループ
-					for (var j=0; j < dataArray[i].length; j++){
-						//１列目は無視
-						if(j != 0){
-							//アンスコでセパレート
-							var valueArray = dataArray[i][j].split('_');
-							//先頭は無条件で削除
-							valueArray.splice(0,1);
-							var eachPoint = [];
-							for(var k=0; k < valueArray.length; k++){
-								if(k % 2 == 1){
-									eachPoint.push(valueArray[k]);
-									if(maxValue < valueArray[k]){
-										maxValue = valueArray[k];
-									}
-								}
-							}
-							points.push(eachPoint);
-							clusters.push(i);
-						}
-					}
-				}
-				maxX = maxValue;
-				maxY = maxValue;
-			}
+        //行分ループ
+        for (var i=0; i < dataArray.length; i++){
+          console.log(dataArray[i]);
+          //列分ループ
+          for (var j=0; j < dataArray[i].length; j++){
+            //１列目は無視
+            if(j != 0){
+              //アンスコでセパレート
+              var valueArray = dataArray[i][j].split('_');
+              //先頭は無条件で削除
+              valueArray.splice(0,1);
+              var eachPoint = [];
+              for(var k=0; k < valueArray.length; k++){
+                if(k % 2 == 1){
+                  eachPoint.push(valueArray[k]);
+                  if(maxValue < valueArray[k]){
+                    maxValue = valueArray[k];
+                  }
+                }
+              }
+              points.push(eachPoint);
+              clusters.push(i);
+            }
+          }
+        }
+        maxX = maxValue;
+        maxY = maxValue;
+      }
 
-			//Mahoutの出力結果からpointsとclustersの値を生成
-			parseMahoutCSV(mahoutKmeansOutput);
+      //Mahoutの出力結果からpointsとclustersの値を生成
+      parseMahoutCSV(mahoutKmeansOutput);
 
-			//#drawにSVGを追加
-			var svg = d3.select('#draw').append('svg').attr({'width':w, 'height':h});
+      //#drawにSVGを追加
+      var svg = d3.select('#draw').append('svg').attr({'width':w, 'height':h});
 
-			//描画領域を中心へ移動
-//			var graph = svg.append('g').attr('transform', 'translate('+ w/2 +',0)');
-			var graph = svg.append('g');
+      //描画領域を中心へ移動
+      var graph = svg.append('g');
 
-			var xScale = d3.scale.linear().domain([0,maxX]).range([0,350]);
-			var yScale = d3.scale.linear().domain([0,maxY]).range([0,350]);
+      var xScale = d3.scale.linear().domain([0,maxX]).range([0,350]);
+      var yScale = d3.scale.linear().domain([0,maxY]).range([0,350]);
 
-			var color = d3.scale.category10();
+      var color = d3.scale.category10();
 
-			//描画処理
-			function draw(){
+      //描画処理
+      function draw(){
 
-				//各要素描画
-				var pointDots = graph.selectAll('points').data(points);
-				pointDots.enter().append('circle')
-					.attr('r', 3)
-					.attr('cx',function(d){ return xScale(d[0]); })
-					.attr('cy',function(d){ return yScale(d[1]); });
+        //各要素描画
+        var pointDots = graph.selectAll('points').data(points);
+        pointDots.enter().append('circle')
+          .attr('r', 3)
+          .attr('cx',function(d){ return xScale(d[0]); })
+          .attr('cy',function(d){ return yScale(d[1]); });
 
 
-		 		//重心点描画
-				var meanDots = graph.selectAll('means').data(means);
-				meanDots.enter().append('circle')
-					.attr('r', 5)
-					.attr('stroke', function(d, i) { return color(i); })
-					.attr('stroke-width', 3)
-					.attr('fill', function(d, i) { return color(i); })
-					.attr('cx',function(d){ return xScale(d[0]); })
-					.attr('cy',function(d){ return yScale(d[1]); });
+        //重心点描画
+        var meanDots = graph.selectAll('means').data(means);
+        meanDots.enter().append('circle')
+          .attr('r', 5)
+          .attr('stroke', function(d, i) { return color(i); })
+          .attr('stroke-width', 3)
+          .attr('fill', function(d, i) { return color(i); })
+          .attr('cx',function(d){ return xScale(d[0]); })
+          .attr('cy',function(d){ return yScale(d[1]); });
 
-		 		//線描画
-				var clusterLines = graph.selectAll('lines').data(clusters);
-				clusterLines.enter().append('line')
-					.attr('x1',function(d, i){ return xScale(points[i][0]); })
-					.attr('y1',function(d, i){ return yScale(points[i][1]); })
-					.attr('x2',function(d, i){ return xScale(means[d][0]); })
-					.attr('y2',function(d, i){ return yScale(means[d][1]); })
-					.attr('stroke', function(d) { return color(d); });
-			}
+        //線描画
+        var clusterLines = graph.selectAll('lines').data(clusters);
+        clusterLines.enter().append('line')
+          .attr('x1',function(d, i){ return xScale(points[i][0]); })
+          .attr('y1',function(d, i){ return yScale(points[i][1]); })
+          .attr('x2',function(d, i){ return xScale(means[d][0]); })
+          .attr('y2',function(d, i){ return yScale(means[d][1]); })
+          .attr('stroke', function(d) { return color(d); });
+      }
 
-			//描画実行
-			draw();
+      //描画実行
+      draw();
 
-		</script>
-	</body>
+    </script>
+  </body>
 </html>
